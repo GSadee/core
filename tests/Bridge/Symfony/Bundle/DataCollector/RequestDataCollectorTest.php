@@ -141,6 +141,7 @@ class RequestDataCollectorTest extends TestCase
 
         $this->assertSame([
             'resource_class' => DummyEntity::class,
+            'identified_by' => null,
             'item_operation_name' => 'get',
             'receive' => true,
             'respond' => true,
