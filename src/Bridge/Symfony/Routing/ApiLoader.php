@@ -121,12 +121,15 @@ final class ApiLoader extends Loader
                     }
                 }
 
+                $identifiers = $resourceMetadata->getSubresourceOperationAttribute($operation['operation_name'], 'identified_by') ?? ['id'];
+
                 $routeCollection->add($operation['route_name'], new Route(
                     $operation['path'],
                     [
                         '_controller' => $controller,
                         '_format' => null,
                         '_api_resource_class' => $operation['resource_class'],
+                        '_api_identified_by' => \is_array($identifiers) ? $identifiers : [$identifiers],
                         '_api_subresource_operation_name' => $operation['route_name'],
                         '_api_subresource_context' => [
                             'property' => $operation['property'],
@@ -224,7 +227,7 @@ final class ApiLoader extends Loader
         $path = trim(trim($resourceMetadata->getAttribute('route_prefix', '')), '/');
         $path .= $this->operationPathResolver->resolveOperationPath($resourceShortName, $operation, $operationType, $operationName);
 
-        $identifiers = $operation['identifiedBy'] ?? ['id'];
+        $identifiers = $operation['identified_by'] ?? ['id'];
 
         $route = new Route(
             $path,

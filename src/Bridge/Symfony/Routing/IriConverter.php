@@ -148,10 +148,9 @@ final class IriConverter implements IriConverterInterface
     public function getItemIriFromResourceClass(string $resourceClass, array $identifiers, int $referenceType = null): string
     {
         $routeName = $this->routeNameResolver->getRouteName($resourceClass, OperationType::ITEM);
-        try {
-            $identifiers = $this->generateIdentifiersUrl($identifiers, $resourceClass);
 
-            return $this->router->generate($routeName, ['id' => implode(';', $identifiers)], $this->getReferenceType($resourceClass, $referenceType));
+        try {
+            return $this->router->generate($routeName, $identifiers, $referenceType);
         } catch (RoutingExceptionInterface $e) {
             throw new InvalidArgumentException(sprintf('Unable to generate an IRI for "%s".', $resourceClass), $e->getCode(), $e);
         }

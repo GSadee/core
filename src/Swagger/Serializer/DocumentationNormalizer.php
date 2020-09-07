@@ -339,7 +339,8 @@ final class DocumentationNormalizer implements NormalizerInterface, CacheableSup
 
         $pathOperation['summary'] ?? $pathOperation['summary'] = sprintf('Retrieves a %s resource.', $resourceShortName);
 
-        $pathOperation = $this->addItemOperationParameters($v3, $pathOperation);
+        $identifiedBy = $resourceMetadata->getTypedOperationAttribute($operationType, $operationName, 'identified_by', 'id');
+        $pathOperation = $this->addItemOperationParameters($v3, $pathOperation, $identifiedBy);
 
         $successResponse = ['description' => sprintf('%s resource response', $resourceShortName)];
         [$successResponse] = $this->addSchemas($v3, $successResponse, $definitions, $resourceClass, $operationType, $operationName, $mimeTypes);
@@ -578,10 +579,13 @@ final class DocumentationNormalizer implements NormalizerInterface, CacheableSup
         return $this->addItemOperationParameters($v3, $pathOperation);
     }
 
-    private function addItemOperationParameters(bool $v3, \ArrayObject $pathOperation): \ArrayObject
-    {
+    private function addItemOperationParameters(
+        bool $v3,
+        \ArrayObject $pathOperation,
+        string $identifiedBy = 'id'
+    ): \ArrayObject {
         $parameter = [
-            'name' => 'id',
+            'name' => $identifiedBy,
             'in' => 'path',
             'required' => true,
         ];

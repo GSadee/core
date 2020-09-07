@@ -103,7 +103,8 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
 
             if (null === $parentOperation) {
                 $rootShortname = $rootResourceMetadata->getShortName();
-                $operation['identifiers'] = [['id', $rootResourceClass, true]];
+                $identifiedBy = $rootResourceMetadata->getItemOperationAttribute($operationName, 'identified_by', 'id');
+                $operation['identifiers'] = [[$identifiedBy, $rootResourceClass, true]];
                 $operation['operation_name'] = sprintf(
                     '%s_%s%s',
                     RouteNameGenerator::inflector($operation['property'], $operation['collection'] ?? false),
